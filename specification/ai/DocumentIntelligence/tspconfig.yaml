@@ -44,6 +44,7 @@ options:
     package-dir: "Azure.AI.DocumentIntelligence"
     namespace: "Azure.AI.DocumentIntelligence"
     model-namespace: false
+    use-model-reader-writer: true
     flavor: azure
   "@azure-tools/typespec-ts":
     title: DocumentIntelligence
