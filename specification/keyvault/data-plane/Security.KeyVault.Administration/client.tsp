@@ -13,6 +13,7 @@ namespace ClientCustomizations;
 @@clientName(Setting.value,"Content", "csharp");
 @@clientName(Setting.type,"SettingType", "csharp");
 @@clientName(SettingTypeEnum,"KeyVaultSettingType", "csharp");
+@@clientName(Permission,"KeyVaultPermission", "csharp");
 
 @client({
     name:"BackupRestoreRestClient",
