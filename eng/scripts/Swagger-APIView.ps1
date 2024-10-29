@@ -97,29 +97,39 @@ function Invoke-SwaggerAPIViewParser {
     $tempWorkingDirectoryPath = [System.IO.Path]::Combine($TempDirectory, $tempWorkingDirectoryName)
     New-Item -ItemType Directory -Path $tempWorkingDirectoryPath
 
+    $savedWorkingDirectory = (Get-Location).Path
     Set-Location -Path $tempWorkingDirectoryPath
 
     try {
       # Generate Swagger APIView tokens
-      $command = "& dotnet swaggerAPIParser --readme $readMeFile --package-name $resourceProvider --use-tag-for-output"
+      $command = "swaggerAPIParser --readme $readMeFile --package-name $resourceProvider --use-tag-for-output"
 
       if ($Tag) {
-          $command += " --tag $Tag"
+        $command += " --tag $Tag"
       }
+
+      LogDebug " Generating '$Type' APIView Tokens using '$readMeFile' for '$resourceProvider'"
+      LogInfo " Command: $command"
         
       Invoke-Expression $command
+      Get-ChildItem -Path $tempWorkingDirectoryPath
       $generatedAPIViewTokenFile = Get-ChildItem -Path $tempWorkingDirectoryPath -File | Select-Object -First 1
+
+      LogInfo " Generated APIView Token File: ${generatedAPIViewTokenFile.FullName}"
+
       $readMeTag = $generatedAPIViewTokenFile.BaseName
 
       LogSuccess " Generated '$Type' APIView Token File using file, '$readMeFile' and tag '$readMeTag'"
 
       $apiViewTokensFilePath = [System.IO.Path]::Combine($TokenDirectory, "$resourceProvider.$Type.json")
+      LogInfo " Moving generated APIView Token file to '$apiViewTokensFilePath'"
       Move-Item -Path $generatedAPIViewTokenFile.FullName -Destination $apiViewTokensFilePath -Force
       return $readMeTag
     } catch {
       LogError " Failed to generate '$Type' APIView Tokens using '$readMeFile' for '$resourceProvider'"
       throw
     } finally {
+      Set-Location -Path $savedWorkingDirectory
       if (Test-Path -Path $tempWorkingDirectoryPath) {
         Remove-Item -Path $tempWorkingDirectoryPath -Recurse -Force
       }
@@ -140,9 +150,9 @@ if ($changedSwaggerFiles.Count -eq 0) {
   exit 0
 }
 
-LogGroupStart " Pullrequest has changes in these swagger files."
+LogGroupStart " Pullrequest has changes in these swagger files..."
 $changedSwaggerFiles | ForEach-Object {
-  LogInfo " $_"
+  LogInfo " - $_"
 }
 LogGroupEnd
 
@@ -155,9 +165,9 @@ $changedSwaggerFiles | ForEach-Object {
     }
 }
 
-LogGroupStart " Swagger APIView Tokens will be generated for the following configuration files."
+LogGroupStart " Swagger APIView Tokens will be generated for the following configuration files..."
 $readmeFile | ForEach-Object {
-  LogInfo " $_"
+  LogInfo " - $_"
 }
 LogGroupEnd
 
@@ -167,16 +177,14 @@ $currentBranch = git rev-parse --abbrev-ref HEAD
 foreach ($readMeFile in $swaggerReadMeFiles) {
     $resourceProvider = Get-ResourceProviderFromReadMePath -ReadMeFilePath $readMeFile
     $tokenDirectory = [System.IO.Path]::Combine($ArtiFactsDirectory, $resourceProvider)
-    New-Item -ItemType Directory -Path $tokenDirectory
-
-    LogDebug " Generating APIView Tokens using '$readMeFile' for '$resourceProvider'"
+    New-Item -ItemType Directory -Path $tokenDirectory | Out-Null
 
     # Generate New APIView Token using default tag on base branch
     git checkout $SourceCommitId
     $defaultTag = Invoke-SwaggerAPIViewParser -Type "New" -ReadMeFilePath $readMeFile -ResourceProvider $resourceProvider -TokenDirectory $tokenDirectory
 
     # Generate BaseLine APIView Token using same tag on target branch
-    get chekout $TargetCommitId
+    get checkout $TargetCommitId
     Invoke-SwaggerAPIViewParser -Type "Baseline" -ReadMeFilePath $readMeFile -ResourceProvider $resourceProvider -TokenDirectory $tokenDirectory -Tag $defaultTag | Out-Null
 }
 
