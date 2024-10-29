@@ -14,6 +14,7 @@ namespace ClientCustomizations;
 @@clientName(Setting.type,"SettingType", "csharp");
 @@clientName(SettingTypeEnum,"KeyVaultSettingType", "csharp");
 @@clientName(Permission,"KeyVaultPermission", "csharp");
+@@clientName(RoleScope,"KeyVaultRoleScope", "csharp");
 
 @client({
     name:"BackupRestoreRestClient",
