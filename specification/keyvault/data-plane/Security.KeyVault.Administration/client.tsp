@@ -19,6 +19,7 @@ namespace ClientCustomizations;
 @@clientName(KeyVault.RoleAssignment,"KeyVaultRoleAssignment", "csharp");
 @@clientName(KeyVault.FullBackupOperation,"FullBackupDetailsInternal", "csharp");
 @@clientName(KeyVault.SettingsListResult, "GetSettingsResult", "csharp");
+@@clientName(RoleAssignmentPropertiesWithScope, "KeyVaultRoleAssignmentProperties");
 
 @client({
     name:"BackupRestoreRestClient",
