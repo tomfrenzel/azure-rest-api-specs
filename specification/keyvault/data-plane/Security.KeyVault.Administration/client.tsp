@@ -3,20 +3,22 @@ import "./main.tsp";
 import "@azure-tools/typespec-client-generator-core";
 
 using Azure.ClientGenerator.Core;
-using KeyVault;
+//using KeyVault;
 
 @TypeSpec.Versioning.useDependency(KeyVault.Versions.`v7.6_preview.1`)
 
 namespace ClientCustomizations;
 
-@@clientName(Setting,"KeyVaultSetting", "csharp");
-@@clientName(Setting.value,"Content", "csharp");
-@@clientName(Setting.type,"SettingType", "csharp");
-@@clientName(SettingTypeEnum,"KeyVaultSettingType", "csharp");
-@@clientName(Permission,"KeyVaultPermission", "csharp");
-@@clientName(RoleScope,"KeyVaultRoleScope", "csharp");
-@@clientName(RoleType,"KeyVaultRoleType", "csharp");
-@@clientName(RoleAssignment,"KeyVaultRoleAssignment", "csharp");
+@@clientName(KeyVault.Setting,"KeyVaultSetting", "csharp");
+@@clientName(KeyVault.Setting.value,"Content", "csharp");
+@@clientName(KeyVault.Setting.type,"SettingType", "csharp");
+@@clientName(KeyVault.SettingTypeEnum,"KeyVaultSettingType", "csharp");
+@@clientName(KeyVault.Permission,"KeyVaultPermission", "csharp");
+@@clientName(KeyVault.RoleScope,"KeyVaultRoleScope", "csharp");
+@@clientName(KeyVault.RoleType,"KeyVaultRoleType", "csharp");
+@@clientName(KeyVault.RoleAssignment,"KeyVaultRoleAssignment", "csharp");
+@@clientName(KeyVault.FullBackupOperation,"FullBackupDetailsInternal", "csharp");
+@@clientName(KeyVault.SettingsListResult, "GetSettingsResult", "csharp");
 
 @client({
     name:"BackupRestoreRestClient",
