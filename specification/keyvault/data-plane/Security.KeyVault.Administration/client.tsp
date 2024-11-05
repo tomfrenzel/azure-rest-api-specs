@@ -3,7 +3,6 @@ import "./main.tsp";
 import "@azure-tools/typespec-client-generator-core";
 
 using Azure.ClientGenerator.Core;
-//using KeyVault;
 
 @TypeSpec.Versioning.useDependency(KeyVault.Versions.`v7.6_preview.1`)
 
@@ -19,9 +18,18 @@ namespace ClientCustomizations;
 @@clientName(KeyVault.RoleAssignment,"KeyVaultRoleAssignment", "csharp");
 @@clientName(KeyVault.FullBackupOperation,"FullBackupDetailsInternal", "csharp");
 @@clientName(KeyVault.SettingsListResult, "GetSettingsResult", "csharp");
-@@clientName(KeyVault.RoleAssignmentPropertiesWithScope, "KeyVaultRoleAssignmentProperties");
-@@clientName(KeyVault.RoleDefinitionType, "KeyVaultRoleDefinitionType");
-@@clientName(KeyVault.Permission, "KeyVaultPermission");
+@@clientName(KeyVault.RoleAssignmentPropertiesWithScope, "KeyVaultRoleAssignmentProperties","csharp");
+@@clientName(KeyVault.RoleDefinitionType, "KeyVaultRoleDefinitionType","csharp");
+@@clientName(KeyVault.Permission, "KeyVaultPermission","csharp");
+@@clientName(KeyVault.Error,"KeyVaultServiceError","csharp");
+@@clientName(KeyVault.DataAction,"KeyVaultDataAction","csharp");
+@@clientName(KeyVault.RestoreOperation, "RestoreDetailsInternal", "csharp");
+
+@@access(KeyVault.RoleAssignmentCreateParameters, Access.internal, "csharp");
+@@access(KeyVault.RoleDefinitionCreateParameters, Access.internal, "csharp");
+@@access(KeyVault.SASTokenParameter, Access.internal, "csharp");
+@@access(KeyVault.SelectiveKeyRestoreOperationParameters, Access.internal, "csharp");
+@@access(KeyVault.RoleDefinitionProperties, Access.internal, "csharp");
 
 @client({
     name:"BackupRestoreRestClient",
